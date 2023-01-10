@@ -1,117 +1,202 @@
-import java.io.File;
-import java.util.Scanner;
-import java.util.InputMismatchException;
+package hyeon;
 
-public class TicTacToe {
-  private char[][] board;     // A 2D array to represent the board
-  private char currentPlayer; // A variable to store the current player
-  private Scanner input;      // A Scanner to read input from the user
-  public TicTacToe() {
-    input = new Scanner(System.in);
-    board = new char[3][3]; // 3x3 board
-    currentPlayer = 'X'; // starting user is X
-    for (int i = 0; i < 3; i++) { // Initialize the board to be empty
-      for (int j = 0; j < 3; j++) {
-        board[i][j] = ' ';
-      }
-    }
-  }
-  
-  public void play() {
-    while (!isGameOver()) { // Keep playing until the game is over
-      printBoard();
-      makeMove(); // Check if the current player has won
-      if (checkForWin()) { // Announce the winner and end the game
-        System.out.println("Player " + currentPlayer + " wins!");
-        return;
-      } // Switch players
-      currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
-    } // If the game is over and no one has won, it's a draw
-    System.out.println("It's a draw!");
-  }
-  
-  private void makeMove() {
-    System.out.print("Enter row (0, 1, 2) for player " + currentPlayer + ": ");
-    int row = -1;
-    while (row < 0 || row > 2) {
-      try {
-        row = input.nextInt();
-        if (row < 0 || row > 2) {
-          System.out.println("Invalid input. Row must be 0, 1, or 2. Try again.");
-        }
-      } catch (InputMismatchException e) {
-        System.out.println("Invalid input. Row must be an integer. Try again.");
-        input.nextLine();
-      }
-    }
-    
-    System.out.print("Enter column (0, 1, 2) for player " + currentPlayer + ": ");
-    int col = -1;
-    while (col < 0 || col > 2) {
-      try {
-        col = input.nextInt();
-        if (col < 0 || col > 2) {
-          System.out.println("Invalid input. Column must be 0, 1, or 2. Try again.");
-        }
-      } catch (InputMismatchException e) {
-        System.out.println("Invalid input. Column must be an integer. Try again.");
-        input.nextLine();
-      }
-    }
-    
-    if (board[row][col] == ' ') { // Make the move
-      board[row][col] = currentPlayer;
-    } else { // The spot is not empty, so prompt the user to try again
-      System.out.println("That spot is already taken. Try again.");
-      makeMove();
-    }
-  }
-  
-  private boolean isGameOver() { // Check if someone has won
-    if (checkForWin()) { 
-      return true;
-    }
-    for (int i = 0; i < 3; i++) { // Check if the board is full
-      for (int j = 0; j < 3; j++) {
-        if (board[i][j] == ' ') { // There's an empty spot, so the game is not over
-          return false;
-        }
-      }
-    } // The board is full and no one has won, so it's a draw
-    return true;
-  }
-  
-  private boolean checkForWin() {
-    for (int i = 0; i < 3; i++) { // Check rows
-      if (board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer) {
-        return true;
-      }
-    }
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-    for (int j = 0; j < 3; j++) { // Check columns
-      if (board[0][j] == currentPlayer && board[1][j] == currentPlayer && board[2][j] == currentPlayer) {
-        return true;
-      }
-    }  // Check diagonals
-    if ((board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer) ||
-      (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer)
-    ) {
-      return true;
-    }
-    return false;    // If none of the above conditions are true, then no one has won
-  }
-  
-  private void printBoard() {
-    System.out.println("  0  " + board[0][0] + "|" + board[0][1] + "|" + board[0][2]);
-    System.out.println("    --+-+--");
-    System.out.println("  1  " + board[1][0] + "|" + board[1][1] + "|" + board[1][2]);
-    System.out.println("    --+-+--");
-    System.out.println("  2  " + board[2][0] + "|" + board[2][1] + "|" + board[2][2]);
-    System.out.println("     0 1 2 ");
-  }
-  
-  public static void main(String[] args) throws ArrayIndexOutOfBoundsException {
-    TicTacToe game = new TicTacToe();
-    game.play();
-  }
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+class MyPanel extends JPanel implements ActionListener {
+	
+	JButton btnArr[][] = new JButton[3][3];
+	int arr[][] = new int[3][3];
+	int turn = 0;
+	
+	JButton winBtn = new JButton();
+	JButton reBtn = new JButton();
+	
+	Color backgroundColor = new Color(255,255,255);
+	Color btnColor = new Color(255,200,200);
+	Color pushedBtnColor1 = new Color(0,255,200);
+	Color pushedBtnColor2 = new Color(0,200,255);
+	Color optionBtnColor = new Color(255,200,200);
+	Font gameBtnFont = new Font("고딕",Font.PLAIN,20);
+	Font optionBtnFont = new Font("고딕",Font.BOLD,15);
+	
+	MyPanel() {
+		
+		this.setLayout(null);
+		this.setBackground(backgroundColor);
+//		this.setSize(400,460);
+//		frame.setSize(400, 460);
+//		Toolkit tk2 = Toolkit.getDefaultToolkit();
+//		Dimension size2 = tk2.getScreenSize();
+//		frame.setLocation(size.width/2-200, size.height/2-230);
+		
+		for(int i=0; i<3; i++) {
+			for(int j=0; j<3; j++) {
+				btnArr[i][j] = new JButton();
+				btnArr[i][j].setBackground(btnColor); //버튼색상
+				btnArr[i][j].setFont(gameBtnFont); //폰트
+				btnArr[i][j].setText(i*3+j+1+"");
+				btnArr[i][j].setSize(100, 100);
+				btnArr[i][j].setLocation(43+j*100, 30+i*100);
+				btnArr[i][j].addActionListener(this);
+				this.add(btnArr[i][j]);
+				arr[i][j] = 0;
+			}
+		}
+		
+//		winBtn.setText("승자는 누구?");				// Q.버튼들도 화면의 중앙으로부터 계산하고 싶은데 여기는 잘 안되네!
+//		winBtn.setSize(160, 40);
+//		winBtn.setLocation(size2.width/2-157, size2.height/2-130);
+//		winBtn.addActionListener(this);
+//		this.add(winBtn);
+
+		winBtn.setText("Winner?");
+		winBtn.setSize(160, 40);
+		winBtn.setLocation(43, 350);		// 왼쪽 상단 0,0 기준으로 지정함.
+		winBtn.setBackground(optionBtnColor);	//버튼색상
+		winBtn.setFont(optionBtnFont);
+		winBtn.addActionListener(this);
+		this.add(winBtn);
+		
+		reBtn.setText("RePlay");
+		reBtn.setSize(120, 40);
+		reBtn.setLocation(223, 350);
+		reBtn.setBackground(optionBtnColor);	//버튼색상
+		reBtn.setFont(optionBtnFont);
+		reBtn.addActionListener(this);
+		this.add(reBtn);	
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		for(int i=0; i<3; i++) {
+			for(int j=0; j<3; j++) {
+				if(e.getSource() == btnArr[i][j]) {
+					if(turn % 2 == 0) {
+						btnArr[i][j].setText("O");
+						btnArr[i][j].setBackground(pushedBtnColor1);
+						arr[i][j] = 1;						
+					}
+					else {
+						btnArr[i][j].setText("X");
+						btnArr[i][j].setBackground(pushedBtnColor2);
+						arr[i][j] = 2;						
+					}
+					btnArr[i][j].setEnabled(false);
+					turn++;					
+				}
+			}
+		}
+		
+		if(e.getSource() == reBtn) {
+			for(int i=0; i<3; i++) {
+				for(int j=0; j<3; j++) {
+					btnArr[i][j].setText(i*3+j+1+"");
+					btnArr[i][j].setEnabled(true);
+					btnArr[i][j].setBackground(btnColor);
+					winBtn.setBackground(btnColor);
+					arr[i][j] = 0;
+				}
+			}
+			winBtn.setText("Winner?");
+			turn = 0;
+		}
+		
+		if(check() == 1) {
+			winBtn.setText("Player1 WIN!");
+			winBtn.setBackground(pushedBtnColor1);
+			for(int i=0; i<3; i++) {
+				for(int j=0; j<3; j++) {
+					btnArr[i][j].setEnabled(false);					
+				}
+			}
+		}
+		if(check() == 2) {
+			winBtn.setText("Player2 WIN!");	
+			winBtn.setBackground(pushedBtnColor2);
+			for(int i=0; i<3; i++) {
+				for(int j=0; j<3; j++) {
+					btnArr[i][j].setEnabled(false);					
+				}
+			}
+		}
+//		if(check() == 0) {
+//			//아직 승부 노노
+//		}
+	}
+		
+	int check() {
+		
+		int j=0;
+		for(int i=0; i<3; i++) {
+			if(arr[i][j] == 1 && arr[i][j+1] == 1 && arr[i][j+2] == 1) {
+				return 1;
+			}
+			else if(arr[i][j] == 2 && arr[i][j+1] == 2 && arr[i][j+2] == 2) {
+				return 2;
+			}
+		}
+		
+		int i=0;
+		for(j=0; j<3; j++) {
+			if(arr[i][j] == 1 && arr[i+1][j] == 1 && arr[i+2][j] == 1) {
+				return 1;
+			}
+			else if(arr[i][j] == 2 && arr[i+1][j] == 2 && arr[i+2][j] == 2) {
+				return 2;
+			}
+		}
+		
+		// 대각선 검사(\)
+		i=0;
+		if(arr[i][i] == 1 && arr[i+1][i+1] == 1 && arr[i+2][i+2] == 1) {
+			return 1;
+		}
+		else if(arr[i][i] == 2 && arr[i+1][i+1] == 2 && arr[i+2][i+2] == 2) {
+			return 2;
+		}
+		
+		// 대각선 검사(/)
+		i=0;
+		if(arr[i][i+2] == 1 && arr[i+1][i+1] == 1 && arr[i+2][i] == 1) {
+			return 1;
+		}
+		else if(arr[i][i+2] == 2 && arr[i+1][i+1] == 2 && arr[i+2][i] == 2) {
+			return 2;
+		}	
+		
+		return 0;
+	}	
+}
+
+public class main {
+
+	public static void main(String[] args) {
+		
+		JFrame frame = new JFrame("Tic Tac Toe");
+		
+		frame.setSize(400, 460);
+		
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Dimension size = tk.getScreenSize();
+		frame.setLocation((size.width-400)/2, (size.height-460)/2);
+
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+
+//		frame.setContentPane(new MyPanel());
+		frame.add(new MyPanel());
+//		MyPanel mp = new MyPanel();
+//		frame.setContentPane(mp);
+		
+		frame.revalidate();		
+	}
 }
