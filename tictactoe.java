@@ -64,21 +64,21 @@ class MyPanel extends JPanel implements ActionListener {
 		
 		reBtn.setText("RePlay");
 		reBtn.setSize(120, 40);
-		reBtn.setLocation(200, 460);
+		reBtn.setLocation(190, 460);
 		reBtn.setBackground(optionBtnColor);	//버튼색상
 		reBtn.setFont(optionBtnFont);
 		reBtn.addActionListener(this);
 		this.add(reBtn);	
 		
-		/*
-		reBtn.setText("ReTurn");
-		reBtn.setSize(120, 40);
-		reBtn.setLocation(320, 460);
-		reBtn.setBackground(optionBtnColor);	//버튼색상
-		reBtn.setFont(optionBtnFont);
-		reBtn.addActionListener(this);
+		
+		returnBtn.setText("ReTurn");
+		returnBtn.setSize(120, 40);
+		returnBtn.setLocation(320, 460);
+		returnBtn.setBackground(optionBtnColor);	//버튼색상
+		returnBtn.setFont(optionBtnFont);
+		returnBtn.addActionListener(this);
 		this.add(returnBtn);	
-		*/
+		
 	}
 	
 	@Override
