@@ -20,6 +20,7 @@ class MyPanel extends JPanel implements ActionListener {
 	JButton winBtn = new JButton();
 	JButton reBtn = new JButton();
 	JButton returnBtn = new JButton();
+	JButton exitBtn = new JButton();
 	
 	Color backgroundColor = new Color(255,255,255);
 	Color btnColor = new Color(255,200,200);
@@ -79,6 +80,14 @@ class MyPanel extends JPanel implements ActionListener {
 		returnBtn.addActionListener(this);
 		this.add(returnBtn);	
 		
+		exitBtn.setText("EXIT");
+		exitBtn.setSize(120, 40);
+		exitBtn.setLocation(320, 520);
+		exitBtn.setBackground(optionBtnColor);	//버튼색상
+		exitBtn.setFont(optionBtnFont);
+		exitBtn.addActionListener(this);
+		this.add(exitBtn);
+		
 	}
 	
 	@Override
@@ -115,6 +124,27 @@ class MyPanel extends JPanel implements ActionListener {
 			winBtn.setText("Winner?");
 			turn = 0;
 		}
+		// 게임종료 버튼
+		if(e.getSource() == exitBtn) {
+			System.exit(0);
+		}
+		
+	    /* returnBon 설명
+		if(e.getSource() == returnBtn) {
+			for(int i=0; i<4; i++) {
+				for(int j=0; j<4; j++) {
+					btnArr[i][j].setText(i*4+j+1+"");
+					btnArr[i][j].setEnabled(true);
+					btnArr[i][j].setBackground(btnColor);
+					winBtn.setBackground(btnColor);
+					arr[i][j] = 0;
+					
+				}
+			}
+			
+			turn = 0;
+		}
+		*/
 		
 		if(check() == 1) {
 			winBtn.setText("Player1 WIN!");
