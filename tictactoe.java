@@ -11,10 +11,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.util.*;
 class MyPanel extends JPanel implements ActionListener {
 	
 	JButton btnArr[][] = new JButton[4][4];
 	int arr[][] = new int[4][4];
+	int lastarr[][] = new int[4][4];
 	int turn = 0;
 	
 	JButton winBtn = new JButton();
@@ -96,18 +98,26 @@ class MyPanel extends JPanel implements ActionListener {
 			for(int j=0; j<4; j++) {
 				if(e.getSource() == btnArr[i][j]) {
 					if(turn % 2 == 0) {
+						
 						btnArr[i][j].setText("O");
 						btnArr[i][j].setBackground(pushedBtnColor1);
-						arr[i][j] = 1;						
+						arr[i][j] = 1;		
+						
+						
 					}
 					else {
+						
 						btnArr[i][j].setText("X");
 						btnArr[i][j].setBackground(pushedBtnColor2);
-						arr[i][j] = 2;						
+						arr[i][j] = 2;		
+						
 					}
+					
 					btnArr[i][j].setEnabled(false);
+					lastarr[i][j] = arr[i][j];
 					turn++;					
 				}
+				
 			}
 		}
 		
@@ -129,22 +139,26 @@ class MyPanel extends JPanel implements ActionListener {
 			System.exit(0);
 		}
 		
-	    /* returnBon 설명
+	    // returnBon 설명
 		if(e.getSource() == returnBtn) {
-			for(int i=0; i<4; i++) {
-				for(int j=0; j<4; j++) {
-					btnArr[i][j].setText(i*4+j+1+"");
-					btnArr[i][j].setEnabled(true);
-					btnArr[i][j].setBackground(btnColor);
-					winBtn.setBackground(btnColor);
-					arr[i][j] = 0;
-					
-				}
-			}
+			int row, col;
+			Scanner scanner = new Scanner(System.in);
 			
-			turn = 0;
+			System.out.println("좌표 입력");
+			col = scanner.nextInt();
+			row = scanner.nextInt();
+					
+			
+			btnArr[col][row].setText(col*4+row+1+"");
+			btnArr[col][row].setEnabled(true);
+			btnArr[col][row].setBackground(btnColor);
+			winBtn.setBackground(btnColor);
+			arr[col][row] = 0;		
+				
+			
+			turn++;
 		}
-		*/
+		
 		
 		if(check() == 1) {
 			winBtn.setText("Player1 WIN!");
@@ -244,5 +258,6 @@ public class main {
 		frame.add(new MyPanel());
 	
 		frame.revalidate();		
+		
 	}
 }
