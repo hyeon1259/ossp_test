@@ -20,7 +20,8 @@ class MyPanel extends JPanel implements ActionListener {
 	
 	JButton btnArr[][] = new JButton[4][4];
 	int arr[][] = new int[4][4];
-	
+	int lastarrX[] = new int[4];
+	int lastarrY[] = new int[4];
 	int turn = 0;
 	
 	JButton winBtn = new JButton();
@@ -94,11 +95,12 @@ class MyPanel extends JPanel implements ActionListener {
 		
 	}
     
-  
+    ArrayList<Integer> listX = new ArrayList<>();
+    ArrayList<Integer> listY = new ArrayList<>();
     @Override
     public void actionPerformed(ActionEvent e) {
     	
-    	
+    	int x, y;
     	for(int i=0; i<4; i++) {
 			for(int j=0; j<4; j++) {
 				if(e.getSource() == btnArr[i][j]) {
@@ -120,13 +122,42 @@ class MyPanel extends JPanel implements ActionListener {
 					}
 					
 					btnArr[i][j].setEnabled(false);
-					
+			
+				
+					x = i;
+					y = j;
+					listX.add(x);
+					listY.add(y);
 					turn++;					
 				}
 				
+				
+							
 			}
 		}
-		
+    	// 한 수 무르기 
+    	if(e.getSource() == returnBtn) {
+    		int a = listX.size()-1;
+			int b = listY.size()-1;
+    		
+			x = listX.get(a);
+			y = listY.get(b);
+			
+			
+			btnArr[x][y].setText("");
+			btnArr[x][y].setEnabled(true);
+			btnArr[x][y].setBackground(btnColor);
+			winBtn.setBackground(btnColor);
+			arr[x][y] = 0;	
+						
+			
+			turn++;
+			listX.remove(a);
+			listY.remove(b);
+			
+    		}
+	
+    	
 		if(e.getSource() == reBtn) {
 			for(int i=0; i<4; i++) {
 				for(int j=0; j<4; j++) {
@@ -145,24 +176,7 @@ class MyPanel extends JPanel implements ActionListener {
 			System.exit(0);
 		}
 		
-		if(e.getSource() == returnBtn) {
-			int row, col;
-			Scanner scanner = new Scanner(System.in);
-			
-			System.out.println("좌표 입력(왼쪽 상단 = 0 0)");
-			
-			col = scanner.nextInt();
-			row = scanner.nextInt();
 		
-			btnArr[col][row].setText("");
-			btnArr[col][row].setEnabled(true);
-			btnArr[col][row].setBackground(btnColor);
-			winBtn.setBackground(btnColor);
-			arr[col][row] = 0;	
-						
-					
-			turn++;
-		}
 				
 				
 		if(check() == 1) {
