@@ -152,8 +152,13 @@ class MyPanel extends JPanel implements ActionListener {
 						
 			
 			turn++;
-			listX.remove(a);
-			listY.remove(b);
+			if(listX.size() != 0) {
+				listX.remove(a);
+			}
+			
+			if(listY.size() != 0) {
+				listY.remove(b);
+			}
 			
     		}
 	
@@ -260,7 +265,7 @@ class main {
 		
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		Dimension size = tk.getScreenSize();
-		frame.setLocation((size.width-400)/2, (size.height-460)/2);
+		//frame.setLocation((size.width-400)/2, (size.height-460)/2);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
